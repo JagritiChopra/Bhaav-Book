@@ -19,6 +19,7 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 // ✅ Configure CORS
 const allowedOrigins = ['https://mind-echo-xxlv.vercel.app', 'http://localhost:5173'];
 const corsOptions = {
@@ -32,6 +33,7 @@ const corsOptions = {
   credentials: true, // only if using cookies/auth headers
 };
 
+app.options("*", cors());
 // ✅ Middlewares
 app.use(cors(corsOptions));
 app.use(express.json());
