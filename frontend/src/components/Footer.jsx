@@ -21,15 +21,15 @@ function Footer() {
     },
     contact: {
       email: "jagritichopra18@gmail.com",
-      phone: "+91 6375919829",
+      phone: "+91 988654321",
       address: {
         street: "",
         city: "Rohtak ,Haryana, India"
       }
     },
     socialLinks: {
-      twitter: "https://x.com/",
-      linkedin: "https://www.linkedin.com/in/",
+      twitter: "https://x.com/JagritiCho98921",
+      linkedin: "https://www.linkedin.com/in/jagriti-chopra-/",
       instagram: "https://www.instagram.com/"
     },
     quickLinks: [
