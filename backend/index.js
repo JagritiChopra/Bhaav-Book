@@ -27,15 +27,16 @@ const corsOptions = {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
-  credentials: true, // only if using cookies/auth headers
+  credentials: true,
 };
 
-app.options("*", cors());
+// app.options("*", cors());
 // ✅ Middlewares
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 
 // ✅ Routes
