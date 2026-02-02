@@ -117,16 +117,65 @@ router.post('/firebase-login', async (req, res) => {
 
 
 
+// router.post('/firebase-google-auth', async (req, res) => {
+//   const { idToken } = req.body;
+//   // console.log(idToken);
+
+//   if (!idToken) {
+//     return res.status(400).json({ success: false, message: 'ID token is required' });
+//   }
+
+//   try {
+//     const decodedToken = await admin.auth().verifyIdToken(idToken);
+//     const { uid, email, name, picture } = decodedToken;
+
+//     if (!email) {
+//       return res.status(400).json({
+//         success: false,
+//         message: 'Email not found in Firebase token',
+//       });
+//     }
+
+//     let user = await User.findOne({ firebaseUID: uid });
+
+//     if (!user) {
+//       user = new User({
+//         firebaseUID: uid,
+//         email,
+//         fullName: name || email.split('@')[0],
+//         profile: { avatar: picture },
+//         isEmailVerified: true,
+//       });
+//       await user.save();
+//     }
+
+//     // Respond success
+//     res.status(200).json({ success: true, message: 'User authenticated', userId: user._id });
+//   } catch (error) {
+//     console.error('Error verifying Firebase ID token:', error);
+//     res.status(401).json({ success: false, message: 'Invalid ID token' });
+//   }
+// });
+
+
 router.post('/firebase-google-auth', async (req, res) => {
   const { idToken } = req.body;
-  // console.log(idToken);
+  
+  console.log("=== FIREBASE GOOGLE AUTH DEBUG ===");
+  console.log("Received idToken:", idToken ? "YES" : "NO");
+  console.log("Token length:", idToken?.length);
+  console.log("Token preview:", idToken?.substring(0, 50) + "...");
 
   if (!idToken) {
     return res.status(400).json({ success: false, message: 'ID token is required' });
   }
 
   try {
+    console.log("Attempting to verify token...");
     const decodedToken = await admin.auth().verifyIdToken(idToken);
+    console.log("Token verified successfully!");
+    console.log("Decoded token:", decodedToken);
+    
     const { uid, email, name, picture } = decodedToken;
 
     if (!email) {
@@ -149,12 +198,15 @@ router.post('/firebase-google-auth', async (req, res) => {
       await user.save();
     }
 
-    // Respond success
-    res.status(200).json({ success: true, message: 'User authenticated', userId: user._id });
+    res.status(200).json({ success: true, message: 'User authenticated', user: user });
   } catch (error) {
-    console.error('Error verifying Firebase ID token:', error);
+    console.error('=== ERROR DETAILS ===');
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
+    console.error('Full error:', error);
     res.status(401).json({ success: false, message: 'Invalid ID token' });
   }
 });
+
 
 export default router;
