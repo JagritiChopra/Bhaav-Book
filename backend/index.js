@@ -14,7 +14,20 @@ import insightRoutes from "./routes/insight.route.js";
 import searchRoutes from "./routes/search.route.js";
 
 dotenv.config();
-connectDB();
+
+(async () => {
+  try {
+    if (process.env.MONGO_URI) {
+      await connectDB();
+      console.log("✅ MongoDB connected");
+    } else {
+      console.log("⚠️ MONGO_URI not set — skipping DB connect");
+    }
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err.message);
+  }
+})();
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
