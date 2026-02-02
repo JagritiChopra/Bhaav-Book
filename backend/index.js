@@ -13,7 +13,7 @@ import searchRoutes from "./routes/search.route.js";
 dotenv.config();
 
 const app = express();
-
+// const PORT = process.env.PORT || 3000; uncommnet in develpment
 // ----------------- DB Connection Cache -----------------
 let cachedDb = null;
 async function initDB() {
@@ -39,12 +39,22 @@ initDB();
 // ----------------- CORS -----------------
 const allowedOrigins = [
   "https://mind-echo-xxlv.vercel.app",
+ 
   "http://localhost:5173",
+    "http://localhost:3000",
 ];
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || allowedOrigins.includes(origin)) callback(null, true);
-    else callback(new Error("Not allowed by CORS"));
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    // Allow exact matches
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    
+    // Allow any *.vercel.app domain (for preview deployments)
+    if (origin.endsWith('.vercel.app')) return callback(null, true);
+    
+    callback(new Error("Not allowed by CORS"));
   },
   credentials: true,
 };
@@ -100,6 +110,12 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ success: false, message: "Something went wrong!" });
 });
+
+
+// ✅ Start server  uncommment in development
+// app.listen(PORT, () => {
+//   console.log(`🚀 Server running on port ${PORT}`);
+// });
 
 // ----------------- Export for Vercel -----------------
 export default app;
