@@ -2,9 +2,19 @@ import express from 'express';
 import admin from '../utils/firebase.js';
 import User from '../models/user.model.js';
 import jwt from 'jsonwebtoken';
-
+import connectDB from '../utils/db.js';
 const router = express.Router();
 
+// Add this middleware to ensure DB is connected
+router.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error('DB connection error:', error);
+    res.status(500).json({ success: false, message: 'Database connection failed' });
+  }
+});
 
 router.post("/firebase-email-signup", async (req, res) => {
   const { idToken, fullName } = req.body;
