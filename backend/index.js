@@ -57,6 +57,11 @@ app.get("/", (req, res) => {
   res.send("Emotion Journal API is running...");
 });
 
+// 🔹 Prevent favicon/image requests from crashing serverless
+app.get("/favicon.ico", (req, res) => res.status(204).end());
+app.get("/favicon.png", (req, res) => res.status(204).end());
+
+
 app.get('/ping', (req, res) => res.send('pong'));
 
 app.use("/api/auth", authRoutes);
