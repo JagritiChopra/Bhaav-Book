@@ -160,21 +160,27 @@ const SignupForm = () => {
   const handleGoogleSignup = async () => {
         // console.log("API_BASE_URL:", API_BASE_URL);
   console.log("ENV VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
-  alert(`API URL: ${VITE_API_BASE_URL}`);
+  //alert(`API URL: ${VITE_API_BASE_URL}`);
 
     setMessage("");
     setGoogleLoading(true);
     dispatch(clearError());
 
     try {
-      const provider = new GoogleAuthProvider();
-      const userCred = await signInWithPopup(auth, provider);
+       console.log("Creating Google provider...");
+    const provider = new GoogleAuthProvider();
+    
+    console.log("Opening popup...");
+    const userCred = await signInWithPopup(auth, provider);
+    console.log("Popup successful, user:", userCred.user);
 
-      const idToken = await userCred.user.getIdToken();
-      localStorage.setItem("authToken", idToken);
+    const idToken = await userCred.user.getIdToken();
+    console.log("Got ID token");
+    localStorage.setItem("authToken", idToken);
 
-      // Dispatch Redux Google auth action
-      const resultAction = await dispatch(googleAuth(idToken));
+    console.log("Dispatching googleAuth...");
+    const resultAction = await dispatch(googleAuth(idToken));
+    console.log("Google auth result:", resultAction);
       
       console.log("Google auth result:", resultAction);
 
