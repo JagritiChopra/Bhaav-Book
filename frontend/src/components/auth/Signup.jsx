@@ -160,7 +160,7 @@ const SignupForm = () => {
   const handleGoogleSignup = async () => {
         // console.log("API_BASE_URL:", API_BASE_URL);
   console.log("ENV VITE_API_BASE_URL:", import.meta.env.VITE_API_BASE_URL);
-  alert(`API URL: ${API_BASE_URL}`);
+  alert(`API URL: ${VITE_API_BASE_UR}`);
 
     setMessage("");
     setGoogleLoading(true);
